@@ -1,11 +1,11 @@
 import MapContainer from './MapContainer';
-import FileUpload from './FileReader';
+import FileUpload from './FileUpload.js';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-            <FileUpload></FileUpload>
+      <FileUpload></FileUpload>
       <MapContainer></MapContainer>
     </div>
   );
