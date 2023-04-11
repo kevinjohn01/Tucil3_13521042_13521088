@@ -1,3 +1,18 @@
 .App {
   text-align: center;
 }
+
+.map_container {
+  position: fixed;
+  margin-top: 10%;
+  margin-left: 60%;
+  width: 400px;
+  height: 400px;
+}
+.graph {
+  position: fixed;
+  margin-top: 10%;
+  margin-left: 60%;
+  width: 400px;
+  height: 1000px;
+}

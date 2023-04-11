@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Map, GoogleApiWrapper, Marker, DirectionsRenderer } from 'google-maps-react';
+import './App.css';
 
 function MapContainer(props) {
   const [selectedPlaces, setSelectedPlaces] = useState([]);
