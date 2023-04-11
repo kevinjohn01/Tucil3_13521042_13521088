@@ -1,4 +1,4 @@
-function UCS(startNode, endNode, weight){ //weight -> int[][]
+function UCS(startNode, endNode, weight){ //weight -> float[][]
     const queue = new PriorityQueue();
     const visited = new Set();
     const distance = Array(weight.length).fill(Infinity);

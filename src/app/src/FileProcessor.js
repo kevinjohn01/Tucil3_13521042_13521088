@@ -3,33 +3,34 @@ function FileProcessor(fileContent){
     let weightstr = [];
     let weight = [];
     let nodenames = [];
-    let i = 0
-    // console.log(lines[0]);
-    for (let line of lines){
-        weightstr[i] = line.split(" ");
-        // console.log("length:" + weightstr[i].length);
-        if(weightstr[i].length === 1){
-            nodenames.push(weightstr[i])
-        }
-        i++;
+    let nodecoor = [];
+    console.log(lines[0]);
+    const nodenums = parseFloat(lines[0]);
+    let j = 0;
+    for (let i = 1; i <= nodenums; i++){
+        let splitnodecoor = lines[i].split(" : ");
+        nodenames[j] = [splitnodecoor[0]];
+        nodecoor[j] = splitnodecoor[1];
+        j++;
+    }
+    let k = 0;
+    for (let i = nodenums + 1; i <= 2 * nodenums; i++){
+        weightstr[k] = lines[i].split(" ");
+        k++;
     }
     // console.log(weight[1]);
     // console.log(i);
-    let z = 0;
-    for (let x = 0; x < i; x++){
-        let y = 0;
-        if(weightstr[x].length !== 1){
-            weight.push([]);
-            for(let el of weightstr[x]){
-                weight[z][y] = parseInt(el);
-                // console.log(z, y, weight[z][y])
-                y++;
-            }
-            z++;
+    for (let i = 0; i < nodenums; i++){
+        weight.push([]);
+        for(let j = 0; j < nodenums; j++){
+            weight[i][j] = parseFloat(weightstr[i][j]);
+            console.log(weightstr[i][j])
         }
     }
-    return ({weight, nodenames});
-    // console.log(weight);
-    // console.log(nodenames);
+    console.log("w:")
+    console.log(weight);
+    console.log(nodenames);
+    console.log(nodecoor);
+    return ({weight, nodenames, nodecoor});
 }
 export default FileProcessor;

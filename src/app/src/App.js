@@ -17,7 +17,7 @@ function App() {
     reader.readAsText(selectedFile);
     reader.onload = (event) => {
       const fileContent = event.target.result;
-      const { weight, nodenames } = FileProcessor(fileContent);
+      const { weight, nodenames, nodecoor } = FileProcessor(fileContent);
       setGraphData({ weight, nodenames });
     };
   };
@@ -30,7 +30,7 @@ function App() {
     setSelectedEndNode(event.target.value);
   };
 
-  const handleExecute = () => {
+  const handleUCSExecute = () => {
     if (!graphData || !selectedStartNode || !selectedEndNode) return;
     const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
     const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
@@ -72,7 +72,7 @@ function App() {
         )}
       </div>
       <div>
-        <button onClick={handleExecute}>Execute</button>
+        <button onClick={handleUCSExecute}>UCS Execute</button>
       </div>
     </div>
   );

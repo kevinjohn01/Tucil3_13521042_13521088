@@ -8,17 +8,17 @@ function GraphProcessor({weight, nodenames, path}) {
   // console.log(nodenames);
   useEffect(() => {
     if (weight && nodenames) {
-      console.log("weight:");
-      console.log(weight);
+      // console.log("weight:");
+      // console.log(weight);
       const newNodes = [];
       const newEdges = [];
       console.log(weight.length);
       for(let i = 0; i < weight.length; i++){
           newNodes.push({id: i, label: nodenames[i][0]});
-          console.log("newNodes");
+          // console.log("newNodes");
           for(let j = 0; j < weight[i].length; j++){
               if(weight[i][j] !== 0) newEdges.push({from: i, to: j});
-              console.log(newEdges);
+              // console.log(newEdges);
           }
       }
       setNodes(newNodes);
