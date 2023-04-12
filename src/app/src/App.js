@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MapContainer from "./MapContainer";
 import GraphProcessor from "./GraphProcessor";
 import FileProcessor from "./FileProcessor";
@@ -14,15 +14,20 @@ function App() {
   const [totalVal, setTotalVal] = useState(null);
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsText(selectedFile);
-    reader.onload = (event) => {
-      const fileContent = event.target.result;
-      const { weight, nodenames, nodecoor } = FileProcessor(fileContent);
-      setGraphData({ weight, nodenames, nodecoor});
-    };
+    try {
+      const selectedFile = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(selectedFile);
+      reader.onload = (event) => {
+        const fileContent = event.target.result;
+        const { weight, nodenames, nodecoor } = FileProcessor(fileContent);
+        setGraphData({ weight, nodenames, nodecoor});
+      };
+    } catch (err) {
+      console.error(err);
+    }
   };
+
 
   const handleSelectStartNode = (event) => {
     setSelectedStartNode(event.target.value);
@@ -34,26 +39,55 @@ function App() {
 
   const handleUCSExecute = () => {
     console.log("handleUCS");
-    if (!graphData) return;
-    if(!selectedStartNode) setSelectedStartNode(graphData.nodenames[0][0]);
-    if(!selectedEndNode) setSelectedEndNode(graphData.nodenames[0][0]);
-    const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
-    const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+    if(!graphData) return;
+    let start, end;
+    if (selectedEndNode && selectedStartNode){
+      start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
+      end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+    }
+    else if(!selectedStartNode){
+      start = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+      if(!selectedEndNode){
+        end = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+      }
+      else{
+        end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+      }
+    }
+    else{
+      start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
+      end = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+    }
+    console.log(start, end, graphData.weight);
     const result = UCS(start, end, graphData.weight);
     let totalVal = 0;
     for(let i = 0; i < result.length - 1; i++){
       totalVal += graphData.weight[result[i]][result[i + 1]];
     }
     setTotalVal(totalVal);
-    setPath(result);
+    setPath(result);  
   };
   const handleAStarExecute = () => {
     console.log("handleAStar");
+    let start, end;
     if (!graphData) return;
-    if(!selectedStartNode) setSelectedStartNode(graphData.nodenames[0][0]);
-    if(!selectedEndNode) setSelectedEndNode(graphData.nodenames[0][0]);
-    const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
-    const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+    if (selectedEndNode && selectedStartNode){
+      start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
+      end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+    }
+    else if(!selectedStartNode){
+      start = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+      if(!selectedEndNode){
+        end = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+      }
+      else{
+        end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+      }
+    }
+    else{
+      start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
+      end = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
+    }
     const result = AStar(start, end, graphData.weight, graphData.nodecoor);
     let totalVal = 0;
     for(let i = 0; i < result.length - 1; i++){
@@ -67,8 +101,8 @@ function App() {
   console.log(path);
   return (
     <div className="App">
+        <input className="input" type="file" onChange={handleFileChange} />
       <div className="input1">
-        <input type="file" onChange={handleFileChange} />
           <label>Select Start Node:</label>
           {graphData && (
             <select id="options" value={selectedStartNode} onChange={handleSelectStartNode}>
@@ -89,7 +123,7 @@ function App() {
       <div className="input2">
         <button onClick={handleUCSExecute}>UCS Execute</button>
         <button onClick={handleAStarExecute}>A* Execute</button>
-        <label>Jarak: {totalVal}</label>
+        <label>Total distance: {totalVal}</label>
       </div>
       <div className="graph">
         {graphData && (
@@ -97,6 +131,8 @@ function App() {
         )}
       </div>
       <MapContainer></MapContainer>
+      <div>
+    </div>
     </div>
   );
 }

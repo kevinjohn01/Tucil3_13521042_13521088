@@ -5,20 +5,29 @@
 }
 .map_container {
   position: absolute;
-  top: 200px;
+  top: 250px;
   left: 900px;
   width: 400px;
   height: 400px;
 }
 .graph {
-  position: absolute;
-  top: 100px;
+  position: relative;
+  top: 10px;
   left: 50px;
-  height: 400px;
+  height: 600px;
   width: 700px;
+  border: 10px;
+}
+
+.input {
+  margin-top: 20px;
+  position: relative;
+  color: aliceblue;
+  height: 40px;
 }
 
 .input1 {
+  position: relative;
   justify-content: center;
   display: flex;
   flex-direction: row;
@@ -31,6 +40,7 @@
 }
 
 .input2 {
+  position: relative;
   justify-content: center;
   display: flex;
   flex-direction: row;
