@@ -34,7 +34,9 @@ function App() {
 
   const handleUCSExecute = () => {
     console.log("handleUCS");
-    if (!graphData || !selectedStartNode || !selectedEndNode) return;
+    if (!graphData) return;
+    if(!selectedStartNode) setSelectedStartNode(graphData.nodenames[0][0]);
+    if(!selectedEndNode) setSelectedEndNode(graphData.nodenames[0][0]);
     const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
     const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
     const result = UCS(start, end, graphData.weight);
@@ -47,7 +49,9 @@ function App() {
   };
   const handleAStarExecute = () => {
     console.log("handleAStar");
-    if (!graphData || !selectedStartNode || !selectedEndNode) return;
+    if (!graphData) return;
+    if(!selectedStartNode) setSelectedStartNode(graphData.nodenames[0][0]);
+    if(!selectedEndNode) setSelectedEndNode(graphData.nodenames[0][0]);
     const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
     const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
     const result = AStar(start, end, graphData.weight, graphData.nodecoor);
@@ -63,44 +67,36 @@ function App() {
   console.log(path);
   return (
     <div className="App">
-      <div>
+      <div className="input1">
         <input type="file" onChange={handleFileChange} />
+          <label>Select Start Node:</label>
+          {graphData && (
+            <select id="options" value={selectedStartNode} onChange={handleSelectStartNode}>
+              {graphData.nodenames.map(option => (
+                <option key={option[0]}>{option[0]}</option>
+              ))}
+            </select>
+          )}
+          <label>Select End Node:</label>
+          {graphData && (
+            <select id="options" value={selectedEndNode} onChange={handleSelectEndNode}>
+              {graphData.nodenames.map(option => (
+                <option key={option[0]}>{option[0]}</option>
+              ))}
+            </select>
+          )}
       </div>
-      <div>
-        <MapContainer></MapContainer>
-      </div>
-      <div>
-        <label>Select Start Node:</label>
-        {graphData && (
-          <select id="options" value={selectedStartNode} onChange={handleSelectStartNode}>
-            {graphData.nodenames.map(option => (
-              <option key={option[0]}>{option[0]}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      <div>
-        <label>Select End Node:</label>
-        {graphData && (
-          <select id="options" value={selectedEndNode} onChange={handleSelectEndNode}>
-            {graphData.nodenames.map(option => (
-              <option key={option[0]}>{option[0]}</option>
-            ))}
-          </select>
-        )}
-      </div>
-      <div>
+      <div className="input2">
         <button onClick={handleUCSExecute}>UCS Execute</button>
-      </div>
-      <div>
         <button onClick={handleAStarExecute}>A* Execute</button>
+        <label>Jarak: {totalVal}</label>
       </div>
       <div className="graph">
         {graphData && (
           <GraphProcessor weight={graphData.weight} nodenames={graphData.nodenames} path={path} />
         )}
       </div>
-      <label>Jarak: {totalVal}</label>
+      <MapContainer></MapContainer>
     </div>
   );
 }

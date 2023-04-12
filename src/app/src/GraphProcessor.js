@@ -49,9 +49,12 @@ function GraphProcessor({ weight, nodenames, path }) {
       { nodes, edges },
       {
         autoResize: true,
+        nodes: {
+          color: "white"
+        },
         edges: {
           color: {
-            color: "black",
+            color: "white",
           }
         }
       }
