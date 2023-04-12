@@ -81,6 +81,7 @@ function App() {
     console.log(start, end, graphData.weight);
     const result = UCS(start, end, graphData.weight);
     let totalVal = 0;
+    if(!result || result[0] === -1) return;
     for(let i = 0; i < result.length - 1; i++){
       totalVal += graphData.weight[result[i]][result[i + 1]];
     }
@@ -109,6 +110,7 @@ function App() {
       end = graphData.nodenames.findIndex((node) => node[0] === graphData.nodenames[0][0]);
     }
     const result = AStar(start, end, graphData.weight, graphData.nodecoor);
+    if(!result || result[0] === -1) return;
     let totalVal = 0;
     for(let i = 0; i < result.length - 1; i++){
       totalVal += graphData.weight[result[i]][result[i + 1]];
