@@ -12,6 +12,7 @@
 ## Deskripsi Singkat
 - Program dapat digunakan untuk mencari rute terdekat dari simpul asal ke simpul tujuan
 - Pengguna dapat memasukkan input file txt berisi matriks ketetanggaan dan koordinat simpul
+- Pengguna dapat menggunakan marker pada google map untuk memasukan koordinat simpul
 - Pengguna dapat memasukkan simpul asal dan simpul tujuan dari simpul-simpul yang terdapat di file masukan
 - Program akan menampilkan rute terdekat berdasarkan pencarian menggunakan algoritma UCS dan A* dan menampilkan jaraknya
 
