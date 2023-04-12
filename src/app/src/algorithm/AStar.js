@@ -45,10 +45,10 @@ function getPath(path, startNode, endNode) {
 }
 
 function heuristic(currNode,endNode,arrayOfCoordinat) {
-    let currX = arrayOfCoordinat[currNode].x;
-    let currY = arrayOfCoordinat[currNode].y;
-    let endX = arrayOfCoordinat[endNode].x;
-    let endY = arrayOfCoordinat[endNode].y;
+    let currX = arrayOfCoordinat[currNode][0];
+    let currY = arrayOfCoordinat[currNode][1];
+    let endX = arrayOfCoordinat[endNode][0];
+    let endY = arrayOfCoordinat[endNode][1];
 
     return ((currX-endX)**2 + (currY-endY)**2)**(0.5);
 }

@@ -3,6 +3,7 @@ import MapContainer from "./MapContainer";
 import GraphProcessor from "./GraphProcessor";
 import FileProcessor from "./FileProcessor";
 import UCS from "./algorithm/UCS";
+import AStar from './algorithm/AStar';
 import "./App.css";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   const [selectedStartNode, setSelectedStartNode] = useState('');
   const [selectedEndNode, setSelectedEndNode] = useState('');
   const [path, setPath] = useState([]);
+  const [totalVal, setTotalVal] = useState(null);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -18,7 +20,7 @@ function App() {
     reader.onload = (event) => {
       const fileContent = event.target.result;
       const { weight, nodenames, nodecoor } = FileProcessor(fileContent);
-      setGraphData({ weight, nodenames });
+      setGraphData({ weight, nodenames, nodecoor});
     };
   };
 
@@ -31,22 +33,38 @@ function App() {
   };
 
   const handleUCSExecute = () => {
+    console.log("handleUCS");
     if (!graphData || !selectedStartNode || !selectedEndNode) return;
     const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
     const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
     const result = UCS(start, end, graphData.weight);
+    let totalVal = 0;
+    for(let i = 0; i < result.length - 1; i++){
+      totalVal += graphData.weight[result[i]][result[i + 1]];
+    }
+    setTotalVal(totalVal);
     setPath(result);
   };
-
+  const handleAStarExecute = () => {
+    console.log("handleAStar");
+    if (!graphData || !selectedStartNode || !selectedEndNode) return;
+    const start = graphData.nodenames.findIndex((node) => node[0] === selectedStartNode);
+    const end = graphData.nodenames.findIndex((node) => node[0] === selectedEndNode);
+    const result = AStar(start, end, graphData.weight, graphData.nodecoor);
+    let totalVal = 0;
+    for(let i = 0; i < result.length - 1; i++){
+      totalVal += graphData.weight[result[i]][result[i + 1]];
+    }
+    setTotalVal(totalVal);
+    setPath(result);
+  };
+  console.log("totalVal");
+  console.log(totalVal);
+  console.log(path);
   return (
     <div className="App">
       <div>
         <input type="file" onChange={handleFileChange} />
-      </div>
-      <div>
-        {graphData && (
-          <GraphProcessor className="graph" weight={graphData.weight} nodenames={graphData.nodenames} path={path} />
-        )}
       </div>
       <div>
         <MapContainer></MapContainer>
@@ -74,6 +92,15 @@ function App() {
       <div>
         <button onClick={handleUCSExecute}>UCS Execute</button>
       </div>
+      <div>
+        <button onClick={handleAStarExecute}>A* Execute</button>
+      </div>
+      <div className="graph">
+        {graphData && (
+          <GraphProcessor weight={graphData.weight} nodenames={graphData.nodenames} path={path} />
+        )}
+      </div>
+      <label>Jarak: {totalVal}</label>
     </div>
   );
 }
