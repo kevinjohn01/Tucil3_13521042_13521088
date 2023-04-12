@@ -22,8 +22,9 @@
 .input {
   margin-top: 20px;
   position: relative;
-  color: aliceblue;
+  color: #fbf8f4;
   height: 40px;
+  left: 3.5%;
 }
 
 .input1 {
@@ -33,7 +34,7 @@
   flex-direction: row;
   align-items: center;
   height: 50px;
-  background-color: aquamarine;
+  background-color:#dafea4;
 }
 .input1 > * {
   margin-left: 10px;
@@ -46,7 +47,7 @@
   flex-direction: row;
   align-items: center;
   height: 50px;
-  background-color:blanchedalmond;
+  background-color:#fbf8f4;
 }
 .input2 > * {
   margin-left: 10px;

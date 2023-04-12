@@ -28,7 +28,7 @@ function GraphProcessor({ weight, nodenames, path }) {
           newNodes.push({ id: `${i}`, label: nodenames[i][0]});
           for (let j = 0; j < weight[i].length; j++) {
             if (weight[i][j] !== 0){
-                newEdges.push({ id: `${id}`, from: i, to: j, label: `${weight[i][j]}`});
+                newEdges.push({ id: `${id}`, from: i, to: j, label: `${weight[i][j].toFixed(4)}`});
                 if(routeEdge[i][j] === true) newRouteEdgeId.push(id);
             }
             id++;
@@ -52,10 +52,10 @@ function GraphProcessor({ weight, nodenames, path }) {
         {
           autoResize: true,
           nodes: {
-            color: "white"
+            color: "#fbf8f4"
           },
           edges: {
-            color: "white",
+            color: "#fbf8f4",
           }
         }
       );
@@ -64,11 +64,11 @@ function GraphProcessor({ weight, nodenames, path }) {
       console.log(routeEdgeId);
       for(let i = 0; i < routeEdgeId.length; i++){
         console.log("update edges");
-        network.body.data.edges.update({id: `${routeEdgeId[i]}`, color: "red"});
+        network.body.data.edges.update({id: `${routeEdgeId[i]}`, color: "dafea4"});
       }
       if(path.length > 0){
-        network.body.data.nodes.update({id: `${path[0]}`, color:"green"});
-        network.body.data.nodes.update({id: `${path[path.length - 1]}`, color: "red"});
+        network.body.data.nodes.update({id: `${path[0]}`, color:"#dafea4"});
+        network.body.data.nodes.update({id: `${path[path.length - 1]}`, color: "#d2c4fb"});
       }
       return () => {
         network.destroy();

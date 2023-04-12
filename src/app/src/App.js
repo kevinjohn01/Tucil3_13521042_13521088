@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import MapContainer from "./MapContainer";
+import { Map, Marker} from 'google-maps-react';
+
 import GraphProcessor from "./GraphProcessor";
 import FileProcessor from "./FileProcessor";
 import UCS from "./algorithm/UCS";
 import AStar from './algorithm/AStar';
+import GMapInputProcessor from './GMapInputProcessor';
 import "./App.css";
 
 function App() {
@@ -12,7 +14,18 @@ function App() {
   const [selectedEndNode, setSelectedEndNode] = useState('');
   const [path, setPath] = useState([]);
   const [totalVal, setTotalVal] = useState(null);
-
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const [pathCoordinates, setPathCoordinates] = useState([]);
+  
+  const handleMapClick = (mapProps, map, event) => {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+    setSelectedPlaces(prevState => [...prevState, { lat, lng }]);
+  };
+  const handleMarkerClick = (place) => {
+    const updatedPlaces = selectedPlaces.filter((p) => p !== place);
+    setSelectedPlaces(updatedPlaces);
+  };
   const handleFileChange = (event) => {
     try {
       const selectedFile = event.target.files[0];
@@ -28,7 +41,14 @@ function App() {
     }
   };
 
+  const handleGMapProcess = (event) => {
+    const {weight, pathCoordinates} = GMapInputProcessor(selectedPlaces, path);
+    const nodenames = selectedPlaces.map(place => [`${place.lat.toFixed(4)}_${place.lng.toFixed(4)}`]);
+    setPathCoordinates(pathCoordinates);
+    setGraphData({weight, nodenames});
+  }
 
+  console.log("pathCoordinates", pathCoordinates);
   const handleSelectStartNode = (event) => {
     setSelectedStartNode(event.target.value);
   };
@@ -121,6 +141,7 @@ function App() {
           )}
       </div>
       <div className="input2">
+        <button onClick={handleGMapProcess}>Process GMap Input</button>
         <button onClick={handleUCSExecute}>UCS Execute</button>
         <button onClick={handleAStarExecute}>A* Execute</button>
         <label>Total distance: {totalVal}</label>
@@ -130,7 +151,37 @@ function App() {
           <GraphProcessor weight={graphData.weight} nodenames={graphData.nodenames} path={path} />
         )}
       </div>
-      <MapContainer></MapContainer>
+      <div className="map_container">
+      {/* <div className="pos_display">
+        {selectedPlaces.map((place, index) => (
+          <div key={index}>
+            <p>Marker {index+1}</p>
+            <p>Latitude: {place.lat}</p>
+            <p>Longitude: {place.lng}</p>
+            <button onClick={() => handleMarkerClick(place)}>Delete Marker</button>
+          </div>
+        ))}
+      </div> */}
+      <div>
+      <Map
+        google={window.google}
+        zoom={18}
+        initialCenter={{ lat: -6.890585, lng: 107.609806 }}
+        onClick={handleMapClick}
+      >
+        {selectedPlaces.map((place) => (
+          <Marker key={`${place.lat}_${place.lng}`} position={place} onClick={() => handleMarkerClick(place)} />
+        ))}
+        {/* {pathCoordinates && pathCoordinates.length >= 2 && (
+          <Polyline
+            path={pathCoordinates.map((coordinate) => ({ lat: coordinate.lat, lng: coordinate.lng }))}
+            strokeColor="#0000FF"
+            strokeWeight={3}
+          />
+        )} */}
+      </Map>
+    </div>
+    </div>
       <div>
     </div>
     </div>
